@@ -11,7 +11,8 @@ databaseConnect()
 
 // JSON DATA
 
-app.use(express.json())
+// app.use(express.json())
+app.use(express.json());
 
 // ?Routes
 

@@ -4,7 +4,7 @@ const asyncHandler = require("../utils/asynHandler");
 const createUser = asyncHandler(async (req, res, next) => {
   const { firstname, lastname, email, password, mobile } = req.body;
 
-  const userExist = await User.findOne(email);
+  const userExist = await User.findOne({email});
 
   if (!userExist) {
     // create user
@@ -17,12 +17,15 @@ const createUser = asyncHandler(async (req, res, next) => {
       mobile,
     });
 
-    res.status(200).json({
+   return  res.status(200).json({
       status: "success",
       user,
     });
   } else {
-    throw new Error("User already exist");
+    res.status(200).json({
+        status: "Fail",
+       message:'User already Exist'
+      });
   }
 });
 
