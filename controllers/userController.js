@@ -5,7 +5,7 @@ const asyncHandler = require("../utils/asynHandler");
 const createUser = asyncHandler(async (req, res, next) => {
   const { firstname, lastname, email, password, mobile } = req.body;
 
-  const userExist = await User.findOne({email});
+  const userExist = await User.findOne({ email });
 
   if (!userExist) {
     // create user
@@ -18,73 +18,84 @@ const createUser = asyncHandler(async (req, res, next) => {
       mobile,
     });
 
-   return  res.status(200).json({
+    return res.status(200).json({
       status: "success",
       user,
     });
-  } else{
-    return next(new AppError('User Already Exist', 403))
+  } else {
+    return next(new AppError("User Already Exist", 403));
+  }
+});
+
+const loginUser = asyncHandler(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const userExist = await User.findOne({ email });
+
+  if (!userExist) {
+    return next(new AppError("User does not exist", 404));
   }
 
+  const passwordCheck = await userExist.correctpassword(
+    userExist.password,
+    password
+  );
 
-   
+  if (!passwordCheck) {
+    return next(new AppError("Invalid Credentials", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    userExist,
+  });
+});
+
+const getAllUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find({});
+
+  res.status(200).json({
+    status: "success",
+    users,
+  });
+});
+
+const getSingleUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const singleUser = await User.findById(id);
+  if (!singleUser) {
+    return next(new AppError("User Does Not Exist", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    singleUser,
+  });
 });
 
 
-const loginUser = asyncHandler( async (req, res, next)=>{
-    const {email, password} = req.body
 
 
-    const userExist = await User.findOne({email})
+const deleteUser = asyncHandler( async(req, res, next)=>{
+    const { id } = req.params;
 
-    if(!userExist){
-      return   next(new AppError('User does not exist', 404))
+    const singleUser = await User.findById(id);
+    if (!singleUser) {
+      return next(new AppError("User Does Not Exist", 404));
     }
-
-    const passwordCheck = await userExist.correctpassword(userExist.password, password)
-
-    
-
-    if(!passwordCheck){
-     return    next(new AppError('Invalid Credentials', 404))
-    }
+  
+    const user = await User.findByIdAndDelete(id)
 
     res.status(200).json({
-        status:"success",
-        userExist
-    })
+        status: "User successfully Deleted",
+        // user
+      });
 })
-
-
-const getAllUsers = asyncHandler(async(req, res, next)=>{
-    const users = await User.find({})
-
-
-    res.status(200).json({
-        status:"success",
-        users
-    })
-})
-
-const getSingleUser = asyncHandler( async(req, res, next)=>{
-    const {id} = req.params
- 
-
-    const singleUser = await User.findById(id)
-    if(!singleUser){
-        return next(new AppError('User Does Not Exist', 404))
-    }
-
-
-    res.status(200).json({
-        status:"success",
-        singleUser
-    })
-})
-
 module.exports = {
   createUser,
   loginUser,
   getAllUsers,
-  getSingleUser
+  getSingleUser,
+  deleteUser
 };
