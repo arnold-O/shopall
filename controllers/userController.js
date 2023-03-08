@@ -37,11 +37,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     return next(new AppError("User does not exist", 404));
   }
 
-  const passwordCheck = await user.correctpassword(
-      password,
-    user.password
-  );
-
+  const passwordCheck = await user.correctpassword(password, user.password);
 
   if (!passwordCheck) {
     return next(new AppError("Invalid Credentials", 404));
@@ -73,95 +69,94 @@ const getSingleUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+const deleteUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
 
-
-
-const deleteUser = asyncHandler( async(req, res, next)=>{
-    const { id } = req.params;
-
-    const singleUser = await User.findById(id);
-    if (!singleUser) {
-      return next(new AppError("User Does Not Exist", 404));
-    }
-  
-    const user = await User.findByIdAndDelete(id)
-
-    sendTokenResponse(user, 200, res);
-})
-const updateUser = asyncHandler( async(req, res, next)=>{
-    const { id } = req.params;
-    const { firstname, lastname, email } = req.body;
-
-    const singleUser = await User.findById(id);
-
-    if( !firstname && !lastname && !email){
-        return next(new AppError('Please enter the Fields', 404))
-    }
-    if (!singleUser) {
-      return next(new AppError("User Does Not Exist", 404));
-    }
-  
-    const user = await User.findByIdAndUpdate(id, {
-        firstname,
-         lastname, 
-         email,
-
-    }, {
-        new: true,
-        runValidators: false,
-      })
-
-
-   res.status(200).json({
-    status:"success",
-    user
-
-   })
-
-   
-})
-
-
-const blockUser = asyncHandler( async(req, res, next)=>{
-  const {id} = req.params
   const singleUser = await User.findById(id);
   if (!singleUser) {
     return next(new AppError("User Does Not Exist", 404));
   }
 
-   await User.findByIdAndUpdate(id, {
-    isBlocked:true
-  },{
-    new:true
-  })
+  const user = await User.findByIdAndDelete(id);
+
+  sendTokenResponse(user, 200, res);
+});
+const updateUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { firstname, lastname, email } = req.body;
+
+  const singleUser = await User.findById(id);
+
+  if (!firstname && !lastname && !email) {
+    return next(new AppError("Please enter the Fields", 404));
+  }
+  if (!singleUser) {
+    return next(new AppError("User Does Not Exist", 404));
+  }
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    {
+      firstname,
+      lastname,
+      email,
+    },
+    {
+      new: true,
+      runValidators: false,
+    }
+  );
 
   res.status(200).json({
-    status:"success",
-    message:"User Blocked"
-  })
-  
-})
-const unBlockUser = asyncHandler( async(req, res, next)=>{
-  const {id} = req.params
+    status: "success",
+    user,
+  });
+});
+
+const blockUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
   const singleUser = await User.findById(id);
   if (!singleUser) {
     return next(new AppError("User Does Not Exist", 404));
   }
 
-  const user = await User.findByIdAndUpdate(id, {
-    isBlocked:false
-  },{
-    new:true
-  })
+  await User.findByIdAndUpdate(
+    id,
+    {
+      isBlocked: true,
+    },
+    {
+      new: true,
+    }
+  );
 
   res.status(200).json({
-    status:"success",
-    message:"User Unblocked"
-  })
-  
+    status: "success",
+    message: "User Blocked",
+  });
+});
+const unBlockUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const singleUser = await User.findById(id);
+  if (!singleUser) {
+    return next(new AppError("User Does Not Exist", 404));
+  }
 
-})
+  const user = await User.findByIdAndUpdate(
+    id,
+    {
+      isBlocked: false,
+    },
+    {
+      new: true,
+    }
+  );
 
+  res.status(200).json({
+    status: "success",
+    message: "User Unblocked",
+  });
+});
 
 module.exports = {
   createUser,
@@ -171,5 +166,5 @@ module.exports = {
   deleteUser,
   updateUser,
   blockUser,
-  unBlockUser
+  unBlockUser,
 };

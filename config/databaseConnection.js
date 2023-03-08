@@ -11,7 +11,6 @@ const databaseConnect = async () => {
   } catch (error) {
     console.log("Databse errr");
   }
-  
 };
 
 module.exports = databaseConnect;
