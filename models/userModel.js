@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema({
@@ -43,6 +44,12 @@ userSchema.pre("save", async function (next) {
     userPassword
   ) {
     return await bcrypt.compare(candidatePassword, userPassword);
+  };
+
+  userSchema.methods.getSignedJwtToken = function () {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
   };
 
 //Export the model
