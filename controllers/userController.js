@@ -43,7 +43,7 @@ const loginUser = asyncHandler( async (req, res, next)=>{
 
     const passwordCheck = await userExist.correctpassword(userExist.password, password)
 
-    console.log(passwordCheck)
+    
 
     if(!passwordCheck){
      return    next(new AppError('Invalid Credentials', 404))
@@ -55,7 +55,36 @@ const loginUser = asyncHandler( async (req, res, next)=>{
     })
 })
 
+
+const getAllUsers = asyncHandler(async(req, res, next)=>{
+    const users = await User.find({})
+
+
+    res.status(200).json({
+        status:"success",
+        users
+    })
+})
+
+const getSingleUser = asyncHandler( async(req, res, next)=>{
+    const {id} = req.params
+ 
+
+    const singleUser = await User.findById(id)
+    if(!singleUser){
+        return next(new AppError('User Does Not Exist', 404))
+    }
+
+
+    res.status(200).json({
+        status:"success",
+        singleUser
+    })
+})
+
 module.exports = {
   createUser,
-  loginUser
+  loginUser,
+  getAllUsers,
+  getSingleUser
 };
