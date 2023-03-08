@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config()
 const app = express()
 
 const authRouter = require('./routes/authRoutes')
+const globalErrorHandler = require("./middlewares/errorHandler");
 
 
 // Database conction Call
@@ -17,6 +18,10 @@ app.use(express.json());
 // ?Routes
 
 app.use('/api/user', authRouter)
+
+
+// Globar error Handler
+app.use(globalErrorHandler);
 
 
 

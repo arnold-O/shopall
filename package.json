@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js",
-    "start:prod":"nodemon index.js"
+    "start":"NODE_ENV=development nodemon index.js",
+    "start:prod": "NODE_ENV=production nodemon app.js"
   },
   "repository": {
     "type": "git",

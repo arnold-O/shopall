@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asynHandler");
 
 const createUser = asyncHandler(async (req, res, next) => {
@@ -21,12 +22,12 @@ const createUser = asyncHandler(async (req, res, next) => {
       status: "success",
       user,
     });
-  } else {
-    res.status(200).json({
-        status: "Fail",
-       message:'User already Exist'
-      });
+  } else{
+    return next(new AppError('User Already Exist', 403))
   }
+
+
+   
 });
 
 module.exports = {
