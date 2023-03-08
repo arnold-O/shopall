@@ -120,11 +120,56 @@ const updateUser = asyncHandler( async(req, res, next)=>{
 
    
 })
+
+
+const blockUser = asyncHandler( async(req, res, next)=>{
+  const {id} = req.params
+  const singleUser = await User.findById(id);
+  if (!singleUser) {
+    return next(new AppError("User Does Not Exist", 404));
+  }
+
+   await User.findByIdAndUpdate(id, {
+    isBlocked:true
+  },{
+    new:true
+  })
+
+  res.status(200).json({
+    status:"success",
+    message:"User Blocked"
+  })
+  
+})
+const unBlockUser = asyncHandler( async(req, res, next)=>{
+  const {id} = req.params
+  const singleUser = await User.findById(id);
+  if (!singleUser) {
+    return next(new AppError("User Does Not Exist", 404));
+  }
+
+  const user = await User.findByIdAndUpdate(id, {
+    isBlocked:false
+  },{
+    new:true
+  })
+
+  res.status(200).json({
+    status:"success",
+    message:"User Unblocked"
+  })
+  
+
+})
+
+
 module.exports = {
   createUser,
   loginUser,
   getAllUsers,
   getSingleUser,
   deleteUser,
-  updateUser
+  updateUser,
+  blockUser,
+  unBlockUser
 };
