@@ -26,6 +26,27 @@ var userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    role:{
+        type:String,
+        default:"user"
+    },
+    cart:{
+        type:Array,
+        default:[]
+    },
+    address:[{
+        type: mongoose.Schema.ObjectId,
+        ref: "Address",   
+      }],
+
+      wishlist:[{
+        type: mongoose.Schema.ObjectId,
+        ref: "Product",
+       
+
+      }]
+},{
+    timestamps:true
 });
 
 
