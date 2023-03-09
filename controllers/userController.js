@@ -1,7 +1,10 @@
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asynHandler");
-const sendTokenResponse = require("../utils/jwebtoken");
+const sendTokenResponse = require('../utils/jwebtoken')
+
+
+
 
 const createUser = asyncHandler(async (req, res, next) => {
   const { firstname, lastname, email, password, mobile } = req.body;
@@ -42,7 +45,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   if (!passwordCheck) {
     return next(new AppError("Invalid Credentials", 404));
   }
-
+ 
   sendTokenResponse(user, 200, res);
 });
 
@@ -157,6 +160,25 @@ const unBlockUser = asyncHandler(async (req, res, next) => {
     message: "User Unblocked",
   });
 });
+// @desc    Log User Out / Clear cookie
+// @route   Get /api/v1/auth/logout
+// @access   Private
+
+const logout = asyncHandler(async (req, res, next) => {
+
+  console.log('hello logout --->')
+ 
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly:true
+  })
+ 
+
+  res.status(200).json({
+    status: "success",
+    
+  });
+});
 
 module.exports = {
   createUser,
@@ -167,4 +189,5 @@ module.exports = {
   updateUser,
   blockUser,
   unBlockUser,
+  logout
 };

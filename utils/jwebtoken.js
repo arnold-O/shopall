@@ -1,8 +1,8 @@
+const User = require("../models/userModel");
 
 
 
-
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = async (user, statusCode, res) => {
     const token = user.getSignedJwtToken();
   
     const options = {
@@ -15,6 +15,10 @@ const sendTokenResponse = (user, statusCode, res) => {
     if (process.env.NODE.env === "production") {
       options.secure = true;
     }
+    await User.findByIdAndUpdate(user.id,{
+      refreshToken:token
+    })
+    console.log(user)
     res.cookie("token", token, options)
     res.status(statusCode).json({
       status: "success",
@@ -23,4 +27,9 @@ const sendTokenResponse = (user, statusCode, res) => {
   };
 
 
+
+
   module.exports = sendTokenResponse
+
+
+
