@@ -165,6 +165,12 @@ const unBlockUser = asyncHandler(async (req, res, next) => {
 // @access   Private
 
 const logout = asyncHandler(async (req, res, next) => {
+  const user = req.user
+  console.log(user)
+
+ await User.findByIdAndUpdate(user.id, {
+  refreshToken:""
+})
 
   console.log('hello logout --->')
  
