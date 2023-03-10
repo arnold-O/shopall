@@ -166,13 +166,13 @@ const unBlockUser = asyncHandler(async (req, res, next) => {
 
 const logout = asyncHandler(async (req, res, next) => {
   const user = req.user
-  console.log(user)
+
 
  await User.findByIdAndUpdate(user.id, {
   refreshToken:""
 })
 
-  console.log('hello logout --->')
+ 
  
   res.cookie('token', 'none', {
     expires: new Date(Date.now() + 10 * 1000),

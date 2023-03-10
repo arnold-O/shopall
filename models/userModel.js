@@ -48,8 +48,6 @@ var userSchema = new mongoose.Schema({
       wishlist:[{
         type: mongoose.Schema.ObjectId,
         ref: "Product",
-       
-
       }],
       refreshToken:{
         type:String

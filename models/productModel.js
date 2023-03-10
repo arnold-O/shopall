@@ -1,0 +1,67 @@
+const mongoose = require('mongoose'); // Erase if already required
+
+// Declare the Schema of the Mongo model
+var productSchema = new mongoose.Schema({
+    title:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    slug:{
+        type:String,
+        required:true,
+        unique:true,
+        lowercase:true
+    },
+    description:{
+        type:String,
+        required:true,
+        
+    },
+    price:{
+        type:Number,
+        required:true,
+    },
+    category:{
+        type: mongoose.Schema.ObjectId,
+        ref: "Category", 
+        required:true,
+    },
+    brand:{
+        type: String,
+        enum: ["Apple", "Sony", "Imose",'Microsoft','Lenovo', 'Facebook'],
+
+    },
+    quantity:{
+        type:Number,
+        required:true,
+    },
+    images:{
+        type:Array
+    },
+    quantity:Number,
+    sold:{
+        type:Number,
+        default:0
+    },
+    color:{
+        type: String,
+        enum: ["Black", "Brown", "Red"],
+
+    },
+    ratings:[
+        {
+            star:Number,
+            postedby:{
+                type:mongoose.Schema.ObjectId,
+                ref:"User"
+            }
+        }
+    ]
+},
+{
+    timestamps:true
+});
+
+//Export the model
+module.exports = mongoose.model('Product', productSchema);

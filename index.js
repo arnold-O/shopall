@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config()
 const app = express()
 
 const authRouter = require('./routes/authRoutes')
+const productRouter = require('./routes/productRoutes')
 const globalErrorHandler = require("./middlewares/errorHandler");
 
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // ?Routes
 
 app.use('/api/user', authRouter)
+app.use('/api/product', productRouter)
 
 
 // Globar error Handler
