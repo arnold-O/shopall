@@ -1,4 +1,5 @@
-const mongoose = require('mongoose'); // Erase if already required
+const mongoose = require('mongoose'); 
+const slugify = require('slugify')
 
 // Declare the Schema of the Mongo model
 var productSchema = new mongoose.Schema({
@@ -9,7 +10,6 @@ var productSchema = new mongoose.Schema({
     },
     slug:{
         type:String,
-        required:true,
         unique:true,
         lowercase:true
     },
@@ -63,6 +63,12 @@ var productSchema = new mongoose.Schema({
 {
     timestamps:true
 });
+
+productSchema.pre("save", function (next) {
+    this.slug = slugify(this.title, { lower: true });
+    next();
+  });
+  
 
 //Export the model
 module.exports = mongoose.model('Product', productSchema);
