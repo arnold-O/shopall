@@ -5,7 +5,7 @@ const { createProduct } = require("../controllers/productController");
 const router = express.Router();
 
 
-router.post("/register", createProduct);
+router.post("/create", createProduct);
 
 
 

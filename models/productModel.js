@@ -25,7 +25,7 @@ var productSchema = new mongoose.Schema({
     category:{
         type: mongoose.Schema.ObjectId,
         ref: "Category", 
-        required:true,
+      
     },
     brand:{
         type: String,
@@ -34,8 +34,9 @@ var productSchema = new mongoose.Schema({
     },
     quantity:{
         type:Number,
-        required:true,
+        required:true
     },
+
     images:{
         type:Array
     },
