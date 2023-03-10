@@ -44,17 +44,20 @@ const updateProduct = asyncHandler(async (req, res, next) => {
     return next(new AppError("Product Does not Exist"));
   }
 
+
   updateProduct = await Product.findOneAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
   });
 
-  
 
-  res.status(200).json({
+  await updateProduct.save()
+
+  res.status(200).json({      
     status: "success",
     updateProduct,
   });
+
 });
 
 module.exports = {

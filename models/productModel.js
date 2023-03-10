@@ -64,6 +64,7 @@ var productSchema = new mongoose.Schema({
     timestamps:true
 });
 
+ 
 productSchema.pre("save", function (next) {
     this.slug = slugify(this.title, { lower: true });
     next();
