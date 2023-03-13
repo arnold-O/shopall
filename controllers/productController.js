@@ -1,11 +1,9 @@
 const Product = require("../models/productModel");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asynHandler");
-const slugify = require('slugify')
+const slugify = require("slugify");
 
 const createProduct = asyncHandler(async (req, res, next) => {
-
-   
   const product = await Product.create(req.body);
 
   res.status(200).json({
@@ -44,19 +42,17 @@ const updateProduct = asyncHandler(async (req, res, next) => {
     return next(new AppError("Product Does not Exist"));
   }
 
-
   updateProduct = await Product.findOneAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
   });
 
-  await updateProduct.save()
+  await updateProduct.save();
 
-  res.status(200).json({      
+  res.status(200).json({
     status: "success",
     updateProduct,
   });
-
 });
 const deleteProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -66,19 +62,12 @@ const deleteProduct = asyncHandler(async (req, res, next) => {
     return next(new AppError("Product Does not Exist"));
   }
 
+  deleteProduct = await Product.findByIdAndDelete(id);
 
-  deleteProduct = await Product.findOneAndDelete(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  await deleteProduct.save()
-
-  res.status(200).json({      
+  res.status(200).json({
     status: "success",
-    message:"Peoduct Deleted successfully"
+    message: "Peoduct Deleted successfully",
   });
-
 });
 
 module.exports = {
@@ -86,5 +75,5 @@ module.exports = {
   getAllProduct,
   getProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 };
