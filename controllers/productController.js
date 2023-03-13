@@ -50,7 +50,6 @@ const updateProduct = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
 
-
   await updateProduct.save()
 
   res.status(200).json({      
@@ -59,10 +58,33 @@ const updateProduct = asyncHandler(async (req, res, next) => {
   });
 
 });
+const deleteProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  let deleteProduct = await Product.findById(id);
+
+  if (!deleteProduct) {
+    return next(new AppError("Product Does not Exist"));
+  }
+
+
+  deleteProduct = await Product.findOneAndDelete(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  await deleteProduct.save()
+
+  res.status(200).json({      
+    status: "success",
+    message:"Peoduct Deleted successfully"
+  });
+
+});
 
 module.exports = {
   createProduct,
   getAllProduct,
   getProduct,
-  updateProduct
+  updateProduct,
+  deleteProduct
 };
