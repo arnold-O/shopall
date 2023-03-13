@@ -186,11 +186,25 @@ const logout = asyncHandler(async (req, res, next) => {
   });
 });
 
-const forgotPassword = asyncHandler(async (req, res, next)=>{
-  const {id} =  req.params
-})
+const updatePassword = asyncHandler(async (req, res, next) => {
 
+  const user = await User.findById(req.user._id).select("password");
 
+  const passwordCheck = await user.correctpassword(
+    req.body.oldpassword,
+    user.password
+  );
+ 
+
+  if (!passwordCheck) {
+    return next(new AppError("credentials are incorrect, please", 400));
+  }
+
+  user.password = req.body.newpassword;
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
+});
 
 module.exports = {
   createUser,
@@ -201,5 +215,6 @@ module.exports = {
   updateUser,
   blockUser,
   unBlockUser,
-  logout
+  logout,
+  updatePassword
 };
