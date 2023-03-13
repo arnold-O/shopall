@@ -186,6 +186,12 @@ const logout = asyncHandler(async (req, res, next) => {
   });
 });
 
+const forgotPassword = asyncHandler(async (req, res, next)=>{
+  const {id} =  req.params
+})
+
+
+
 module.exports = {
   createUser,
   loginUser,

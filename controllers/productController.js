@@ -14,14 +14,13 @@ const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 const getAllProduct = asyncHandler(async (req, res, nest) => {
-
-    const features = new ApiFeatures(Product.find(), req.query)
+  const features = new ApiFeatures(Product.find(), req.query)
     .filter()
     .sorting()
     .fieldlimiting()
     .paginate();
-    
-  const products = await features.query
+
+  const products = await features.query;
 
   res.status(200).json({
     status: "success",
