@@ -2,6 +2,7 @@ const Product = require("../models/productModel");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asynHandler");
 const slugify = require("slugify");
+const ApiFeatures = require("../middlewares/apiFeatures");
 
 const createProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.create(req.body);
@@ -13,7 +14,14 @@ const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 const getAllProduct = asyncHandler(async (req, res, nest) => {
-  const products = await Product.find({});
+
+    const features = new ApiFeatures(Product.find(), req.query)
+    .filter()
+    .sorting()
+    .fieldlimiting()
+    .paginate();
+    
+  const products = await features.query
 
   res.status(200).json({
     status: "success",
@@ -66,7 +74,7 @@ const deleteProduct = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    message: "Peoduct Deleted successfully",
+    message: "Product Deleted successfully",
   });
 });
 
