@@ -1,10 +1,7 @@
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asynHandler");
-const sendTokenResponse = require('../utils/jwebtoken')
-
-
-
+const sendTokenResponse = require("../utils/jwebtoken");
 
 const createUser = asyncHandler(async (req, res, next) => {
   const { firstname, lastname, email, password, mobile } = req.body;
@@ -45,7 +42,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   if (!passwordCheck) {
     return next(new AppError("Invalid Credentials", 404));
   }
- 
+
   sendTokenResponse(user, 200, res);
 });
 
@@ -165,36 +162,29 @@ const unBlockUser = asyncHandler(async (req, res, next) => {
 // @access   Private
 
 const logout = asyncHandler(async (req, res, next) => {
-  const user = req.user
+  const user = req.user;
 
+  await User.findByIdAndUpdate(user.id, {
+    refreshToken: "",
+  });
 
- await User.findByIdAndUpdate(user.id, {
-  refreshToken:""
-})
-
- 
- 
-  res.cookie('token', 'none', {
+  res.cookie("token", "none", {
     expires: new Date(Date.now() + 10 * 1000),
-    httpOnly:true
-  })
- 
+    httpOnly: true,
+  });
 
   res.status(200).json({
     status: "success",
-    
   });
 });
 
 const updatePassword = asyncHandler(async (req, res, next) => {
-
   const user = await User.findById(req.user._id).select("password");
 
   const passwordCheck = await user.correctpassword(
     req.body.oldpassword,
     user.password
   );
- 
 
   if (!passwordCheck) {
     return next(new AppError("credentials are incorrect, please", 400));
@@ -216,5 +206,5 @@ module.exports = {
   blockUser,
   unBlockUser,
   logout,
-  updatePassword
+  updatePassword,
 };
