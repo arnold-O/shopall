@@ -87,6 +87,7 @@ userSchema.methods.getSignedJwtToken = function () {
   });
 };
 
+
 userSchema.methods.createPasswordResetToken = async function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
 

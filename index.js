@@ -16,7 +16,7 @@ databaseConnect()
 // app.use(express.json())
 app.use(express.json());
 
-// ?Routes
+//Routes
 
 app.use('/api/user', authRouter)
 app.use('/api/product', productRouter)
